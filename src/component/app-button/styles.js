@@ -1,8 +1,8 @@
 import {StyleSheet} from 'react-native';
-import { Colors, AppStyles } from '../../theme';
+import {Colors, AppStyles} from '../../theme';
 
 const styles = StyleSheet.create({
-    viewStyle: {
+  viewStyle: {
     paddingHorizontal: 16,
     borderRadius: 6,
     borderColor: Colors.darkBorder,
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     height: 30,
     resizeMode: 'center',
   },
-})
+});
 
 export default styles;
