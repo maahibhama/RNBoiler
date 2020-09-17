@@ -1,39 +1,77 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  ImageBackground,
-  FlatList,
   SafeAreaView,
   Image,
-  Button,
+  PermissionsAndroid,
+  Platform,
 } from 'react-native';
 
 import PropTypes from 'prop-types';
+import {useFocusEffect} from '@react-navigation/native';
+
 import CameraRoll from '@react-native-community/cameraroll';
 
-import styles from './styles';
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
 import {icons} from '../../constants/Assets';
 import Routes from '../../routes/routes';
+
 import {navigate} from '../../routes/NavigationService';
 import AppButton from '../../component/app-button';
+
+import {getImageUrl} from '../../constants/utility';
+import ImageCollection from '../../component/image-collection';
+
+import styles from './styles';
 
 const GetStarted = (props) => {
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (Platform.OS == 'ios') {
+        getImages();
+      } else {
+        hasAndroidPermission().then((response) => {
+          if (response) {
+            getImages();
+          }
+        });
+      }
+    }, []),
+  );
+
   useEffect(() => {
-    getImages();
+    if (Platform.OS == 'ios') {
+      getImages();
+    } else {
+      hasAndroidPermission().then((response) => {
+        if (response) {
+          getImages();
+        }
+      });
+    }
   }, []);
 
+  async function hasAndroidPermission() {
+    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+
+    const hasPermission = await PermissionsAndroid.check(permission);
+    if (hasPermission) {
+      return true;
+    }
+
+    const status = await PermissionsAndroid.request(permission);
+    return status === 'granted';
+  }
+
   const getImages = () => {
-    CameraRoll.getPhotos({first: 100})
+    CameraRoll.getPhotos({first: 100, groupTypes: 'All', assetType: 'Photos'})
       .then((data) => {
         const assets = data.edges;
         const photos = assets.map((asset, index) => {
           const info = asset.node.image;
+          info.uri = getImageUrl({selectedImage: info});
           info.id = index;
           info.isSelected = false;
           return info;
@@ -56,24 +94,6 @@ const GetStarted = (props) => {
     setSelectedImage(item);
   };
 
-  const renderItem = ({item, index}) => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          onSelectImage(item);
-        }}>
-        <View style={styles.item}>
-          <Image source={{uri: item.uri}} style={styles.itemImage} />
-          {item.isSelected && (
-            <View style={styles.imageSelectedIconContainer}>
-              <Image source={icons.check} style={styles.imageSelectedIcon} />
-            </View>
-          )}
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
   const onClickEdit = () => {
     navigate(Routes.Screens.HOME, {selectedImage: selectedImage});
   };
@@ -81,7 +101,11 @@ const GetStarted = (props) => {
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.topView}>
-        <AppButton title={'Edit'} onPress={onClickEdit} styles={styles.buttonStyle}/>
+        <AppButton
+          title={'Edit'}
+          onPress={onClickEdit}
+          styles={styles.buttonStyle}
+        />
       </View>
       <View style={styles.imageConatiner}>
         {selectedImage && (
@@ -93,17 +117,7 @@ const GetStarted = (props) => {
           />
         )}
       </View>
-      <View style={styles.tableContainer}>
-        <FlatList
-          horizontal
-          extraData={selectedImage}
-          data={images}
-          showsHorizontalScrollIndicator={false}
-          renderItem={renderItem}
-          style={styles.tableStyle}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+      <ImageCollection selectedImage={selectedImage} images={images} onSelectImage={onSelectImage} />
     </SafeAreaView>
   );
 };
