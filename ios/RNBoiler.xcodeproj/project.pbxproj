@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* RNBoilerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RNBoilerTests.m */; };
+		0FFF466A250FCE9200C6ACB1 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF4662250FCE9100C6ACB1 /* Utility.m */; };
+		0FFF466B250FCE9200C6ACB1 /* RNSketchCanvasManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF4664250FCE9100C6ACB1 /* RNSketchCanvasManager.m */; };
+		0FFF466C250FCE9200C6ACB1 /* RNSketchData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF4665250FCE9100C6ACB1 /* RNSketchData.m */; };
+		0FFF466D250FCE9200C6ACB1 /* RNSketchCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF4668250FCE9200C6ACB1 /* RNSketchCanvas.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -45,6 +49,14 @@
 		00E356EE1AD99517003FC87E /* RNBoilerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNBoilerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RNBoilerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNBoilerTests.m; sourceTree = "<group>"; };
+		0FFF4662250FCE9100C6ACB1 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
+		0FFF4663250FCE9100C6ACB1 /* RNSketchCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSketchCanvas.h; sourceTree = "<group>"; };
+		0FFF4664250FCE9100C6ACB1 /* RNSketchCanvasManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSketchCanvasManager.m; sourceTree = "<group>"; };
+		0FFF4665250FCE9100C6ACB1 /* RNSketchData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSketchData.m; sourceTree = "<group>"; };
+		0FFF4666250FCE9100C6ACB1 /* RNSketchData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSketchData.h; sourceTree = "<group>"; };
+		0FFF4667250FCE9200C6ACB1 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
+		0FFF4668250FCE9200C6ACB1 /* RNSketchCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSketchCanvas.m; sourceTree = "<group>"; };
+		0FFF4669250FCE9200C6ACB1 /* RNSketchCanvasManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNSketchCanvasManager.h; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RNBoiler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RNBoiler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RNBoiler/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RNBoiler/AppDelegate.m; sourceTree = "<group>"; };
@@ -134,7 +146,6 @@
 				C77FF491BC0A8EF09D177C86 /* Pods-RNBoiler-tvOSTests.debug.xcconfig */,
 				5A4251FDBEA7F79DE0A79408 /* Pods-RNBoiler-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -144,6 +155,14 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				0FFF4663250FCE9100C6ACB1 /* RNSketchCanvas.h */,
+				0FFF4668250FCE9200C6ACB1 /* RNSketchCanvas.m */,
+				0FFF4669250FCE9200C6ACB1 /* RNSketchCanvasManager.h */,
+				0FFF4664250FCE9100C6ACB1 /* RNSketchCanvasManager.m */,
+				0FFF4666250FCE9100C6ACB1 /* RNSketchData.h */,
+				0FFF4665250FCE9100C6ACB1 /* RNSketchData.m */,
+				0FFF4667250FCE9200C6ACB1 /* Utility.h */,
+				0FFF4662250FCE9100C6ACB1 /* Utility.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -569,7 +588,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				0FFF466D250FCE9200C6ACB1 /* RNSketchCanvas.m in Sources */,
+				0FFF466A250FCE9200C6ACB1 /* Utility.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				0FFF466C250FCE9200C6ACB1 /* RNSketchData.m in Sources */,
+				0FFF466B250FCE9200C6ACB1 /* RNSketchCanvasManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
