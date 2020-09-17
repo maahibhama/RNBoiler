@@ -1,94 +1,154 @@
-import React, {useState} from 'react';
-import {View, SafeAreaView, Image, Animated, PanResponder} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import PropTypes from 'prop-types';
+import React, {useEffect, useState} from 'react';
+import {Alert, SafeAreaView} from 'react-native';
+import CameraRoll from '@react-native-community/cameraroll';
+import {captureRef} from 'react-native-view-shot';
+
+import AppHeader from '../../component/app-header';
+import StockColorSize from '../../component/stock-color-size';
+import PenTool from '../../component/pen-tool';
+import PenSkech from '../../component/pen-skech';
+import SketchCanvasView from '../../component/sketch-canvas-view';
+
+import {goBack} from '../../routes/NavigationService';
+import {EditorColors, StockWidths} from '../../constants/content';
+
 import styles from './styles';
-import {icons} from '../../constants/Assets';
-import AppButton from '../../component/app-button';
 
 const Home = (props) => {
+  
   const [selectedImage, setSelectedImage] = useState(
     props.route.params.selectedImage,
   );
-  const pan = React.useRef(new Animated.ValueXY());
-  const onClickEdit = () => {};
+  const [isPenSelected, setIsPenSelected] = useState(true);
 
-  const onMove = React.useCallback((_, gesture) => {
-  }, []);
+  const [selectedColor, setSelectedColor] = useState(EditorColors[0]);
+  const [showLineWidth, setShowLineWidth] = useState(false);
+  const [selectedStockWidth, setSelectedStockWidth] = useState(StockWidths[0]);
+  const [enableEarser, setEnableEarser] = useState(false);
+  const [undoPaths, setUndoPaths] = useState([]);
 
-  const panResponder = React.useMemo(() => PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onMoveShouldSetPanResponderCapture: () => true,
+  let _sketchCanvas = null;
+  let _viewShot = null;
 
-    onPanResponderGrant: (evt, gestureState) => {
-      pan.current.setOffset({x: pan.current.x._value, y: pan.current.y._value});
-      pan.current.setValue({x: 0, y: 0});
-    },
+  useEffect(() => {}, [showLineWidth]);
 
-    onPanResponderMove: Animated.event([null, {
-      dx  : pan.current.x,
-      dy  : pan.current.y
-    }], {
-      listener: onMove
-    }),
-    onPanResponderRelease: (e, gesture) => {
-      /*if (!isDropZone(gesture)) {*/
-        Animated.spring(
-          pan.current,
-          {toValue:{x:0 - pan.current.x._offset,y: 0- pan.current.y._offset}}
-        ).start(() => {
-            pan
-                .current
-                .setValue({x: 0, y: 0})
-            pan
-                .current
-                .setOffset({x: 0, y: 0})
-        });
-      /*}
-      else {
-        pan.current.flattenOffset()
-      }*/
+  const onClickBack = () => {
+    goBack();
+  };
+
+  const onClickDelete = () => {
+    if (!!_sketchCanvas) {
+      _sketchCanvas.clear();
+      setUndoPaths([]);
     }
-  }), []);
+  };
+
+  const onClickUndo = () => {
+    if (!!_sketchCanvas) {
+      const allPaths = _sketchCanvas.getPaths() || [];
+      if (allPaths.length > 0) {
+        const lastPath = allPaths.slice(-1)[0];
+
+        const paths = [...undoPaths, ...[lastPath]];
+        setUndoPaths(paths);
+        _sketchCanvas.undo();
+      }
+    }
+  };
+
+  const onClickRedo = () => {
+    if (!!_sketchCanvas && undoPaths.length > 0) {
+      const lastPath = undoPaths.pop();
+      setUndoPaths(undoPaths);
+      _sketchCanvas.addPath(lastPath);
+    }
+  };
+
+  const onClickDone = () => {
+    if (!!_viewShot) {
+      captureRef(_viewShot, {
+        format: 'jpg',
+        quality: 0.8,
+      }).then(
+        (uri) => {
+          CameraRoll.saveToCameraRoll(uri)
+            .then(Alert.alert('Success', 'Photo added to camera roll!'))
+            .catch((err) => console.log('err:', err));
+        },
+        (error) => console.error('Oops, snapshot failed', error),
+      );
+    }
+  };
+
+  const onClickPen = () => {
+    setIsPenSelected(true);
+    setSelectedStockWidth(2);
+  };
+
+  const onClickSkech = () => {
+    setIsPenSelected(false);
+    setSelectedStockWidth(16);
+  };
+
+  const onClickColor = (item) => {
+    setSelectedColor(item);
+  };
+
+  const onClickChangeStockWidth = (item) => {
+    setSelectedStockWidth(item);
+  };
+
+  const onClickColorChange = () => {
+    showColorAndStockChange(false);
+  };
+
+  const onClickStockWidth = () => {
+    showColorAndStockChange(true);
+  };
+
+  const showColorAndStockChange = (showLine) => {
+    setShowLineWidth(showLine);
+  };
+
+  const onClickEarser = () => {
+    setEnableEarser(!enableEarser);
+  };
 
   return (
     <SafeAreaView style={styles.main}>
-      <View style={styles.headerView}>
-        <AppButton
-          image={icons.delete}
-          onPress={onClickEdit}
-          styles={styles.buttonStyle}
-        />
-        <View style={styles.middleView} />
-        <AppButton
-          image={icons.undo}
-          onPress={onClickEdit}
-          styles={styles.buttonStyle}
-        />
-        <AppButton
-          image={icons.redo}
-          onPress={onClickEdit}
-          styles={styles.buttonStyle}
-        />
-        <AppButton
-          title={'Done'}
-          onPress={onClickEdit}
-          styles={styles.doneButtonStyle}
-        />
-      </View>
-      <View style={styles.imageConatainer}>
-        <Image
-          resizeMethod={'resize'}
-          resizeMode={'center'}
-          source={{uri: selectedImage.uri}}
-          style={styles.selectedImage}
-        />
-      </View>
-      <Animated.View
-          {...panResponder.panHandlers}
-          style={[pan.current.getLayout(), styles.editorStyle]}
-        >
-        </Animated.View>
+      <AppHeader
+        onClickBack={onClickBack}
+        onClickDelete={onClickDelete}
+        onClickUndo={onClickUndo}
+        onClickRedo={onClickRedo}
+        onClickDone={onClickDone}
+      />
+      <SketchCanvasView
+        viewShotRef={(ref) => (_viewShot = ref)}
+        sketchCanvasRef={(ref) => (_sketchCanvas = ref)}
+        selectedImage={selectedImage}
+        enableEarser={enableEarser}
+        selectedStockWidth={selectedStockWidth}
+        selectedColor={selectedColor}
+      />
+      <PenSkech
+        onClickPen={onClickPen}
+        onClickSkech={onClickSkech}
+        isPenSelected={isPenSelected}
+      />
+      <PenTool
+        selectedColor={selectedColor}
+        enableEarser={enableEarser}
+        onClickColorChange={onClickColorChange}
+        onClickStockWidth={onClickStockWidth}
+        onClickEarser={onClickEarser}
+      />
+      <StockColorSize
+        selectedColor={selectedColor}
+        showLineWidth={showLineWidth}
+        onClickChangeStockWidth={onClickChangeStockWidth}
+        onClickColor={onClickColor}
+      />
     </SafeAreaView>
   );
 };
