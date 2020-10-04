@@ -6,7 +6,9 @@ const Navigations = {
 
 const Screens = {
   GET_STARTED: 'GetStarted',
-  HOME: 'Home'
+  HOME: 'Home',
+  ADD_EXPENSE: 'AddExpense',
+  EDIT_INCOME: 'EditIncome'
 };
 
 const Routes = {
