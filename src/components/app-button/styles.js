@@ -4,21 +4,11 @@ import { Colors } from '../../theme';
 
 export default StyleSheet.create({
   viewStyle: {
-    paddingHorizontal: 16,
-    borderRadius: 6,
-    borderColor: Colors.darkBorder,
-    borderWidth: 1,
     height: 36,
-    backgroundColor: Colors.darkYellow,
   },
   disableViewStyle: {
-    paddingHorizontal: 16,
-    borderRadius: 6,
-    borderColor: Colors.lightBorder,
-    borderWidth: 1,
     height: 36,
     backgroundColor: Colors.grayBorder,
-    color: Colors.lightGray,
   },
   textStyle: {
     fontWeight: '500',
